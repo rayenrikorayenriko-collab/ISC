@@ -1,0 +1,1150 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>
+/* ISC centered account gate */
+#iscAuthOverlay{position:fixed;inset:0;z-index:3000;background:radial-gradient(circle at 15% 10%,rgba(45,132,255,.22),transparent 34%),radial-gradient(circle at 90% 90%,rgba(26,95,175,.18),transparent 35%),rgba(3,8,18,.97);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.isc-auth-card{width:min(100%,430px);background:linear-gradient(160deg,rgba(15,31,55,.98),rgba(7,15,29,.99));border:1px solid rgba(104,174,255,.35);border-radius:26px;padding:clamp(22px,5vw,34px);box-shadow:0 28px 90px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.06);color:#eef6ff}
+.isc-auth-brand{display:flex;align-items:center;gap:12px;margin-bottom:25px}.isc-auth-logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#59b7ff,#1d55c7);color:white;font-weight:900;font-size:1.15rem;box-shadow:0 8px 25px #1676df55}.isc-auth-brand strong{display:block;font-size:1.05rem;letter-spacing:.04em}.isc-auth-brand span{display:block;color:#94b5dc;font-size:.76rem;margin-top:3px}
+.isc-auth-card h2{margin:0 0 7px;font-size:1.65rem;letter-spacing:-.035em}.isc-auth-muted{color:#9ab6d8;font-size:.9rem;line-height:1.55;margin-bottom:22px}
+.isc-auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;border:1px solid #243c5d;border-radius:14px;background:#071121;margin-bottom:22px}.isc-auth-tabs button{border:0;border-radius:10px;padding:11px;background:transparent;color:#9db5d3;font-weight:700;cursor:pointer}.isc-auth-tabs button.active{background:linear-gradient(135deg,#2675cf,#174c9a);color:white;box-shadow:0 5px 18px #1264c444}
+.isc-auth-card label{display:block;color:#d5e6fb;font-size:.85rem;font-weight:600;margin:12px 0 7px}.isc-auth-card input{width:100%;padding:14px 15px;background:#060e1b;color:white;border:1px solid #29476c;border-radius:12px;outline:none;transition:border-color .2s,box-shadow .2s}.isc-auth-card input:focus{border-color:#55adff;box-shadow:0 0 0 3px #368de622}.isc-auth-card input::placeholder{color:#607b9b}
+#iscPrimaryBtn{width:100%;margin-top:20px;border:1px solid #67b8ff;border-radius:13px;padding:14px;background:linear-gradient(135deg,#328ce5,#1751ac);color:#fff;font-weight:800;font-size:.96rem;cursor:pointer;box-shadow:0 9px 24px #1765c433}#iscPrimaryBtn:disabled{opacity:.6;cursor:wait}.isc-auth-msg{font-size:.87rem;line-height:1.5;margin-top:14px;color:#9bd6ff;overflow-wrap:anywhere;min-height:1.3em}.isc-auth-foot{margin-top:22px;padding-top:17px;border-top:1px solid #1d3452;color:#7f9bbb;font-size:.75rem;line-height:1.55;text-align:center}.isc-auth-note{color:#91a9c7;font-size:.78rem;margin-top:12px;line-height:1.5}.isc-hidden-trap{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+@media(max-width:480px){#iscAuthOverlay{padding:14px}.isc-auth-card{border-radius:22px}.isc-auth-card h2{font-size:1.5rem}}
+
+</style></head><body><!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>ISC — International Science Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+:root {
+--bg-0: #090b12;
+--bg-1: #0d1220;
+--card: rgba(11, 16, 31, 0.86);
+--line: rgba(54, 86, 145, 0.55);
+--line-strong: #4a9eff;
+--text: #eef5ff;
+--muted: #9abce6;
+--accent: #4a9eff;
+--accent-2: #71c8ff;
+--success: #52dd95;
+--warning: #ff7a7a;
+--gold: #ffe39a;
+}
+
+body {
+font-family: "Inter", sans-serif;
+background:
+radial-gradient(circle at top left, rgba(74, 158, 255, 0.14), transparent 28%),
+radial-gradient(circle at top right, rgba(113, 200, 255, 0.12), transparent 22%),
+linear-gradient(180deg, var(--bg-0), #05070d);
+color: var(--text);
+min-height: 100vh;
+line-height: 1.5;
+overflow-x: hidden;
+}
+
+.stars {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 0;
+}
+
+.star {
+position: absolute;
+background: #ffffff;
+border-radius: 999px;
+opacity: 0;
+animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+0%, 100% { opacity: 0; }
+50% { opacity: 1; }
+}
+
+.splash-screen {
+position: fixed;
+inset: 0;
+z-index: 1000;
+background: #000000;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+transition: opacity 0.8s ease;
+}
+
+.splash-screen.hide {
+opacity: 0;
+pointer-events: none;
+}
+
+.connecting-text {
+font-size: 2rem;
+font-weight: 800;
+letter-spacing: 4px;
+margin-bottom: 2rem;
+background: linear-gradient(135deg, #ffffff, var(--accent-2), #3f69ff);
+background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+animation: pulse 1.5s infinite;
+text-align: center;
+}
+
+@keyframes pulse {
+0%, 100% { opacity: 0.65; letter-spacing: 4px; }
+50% { opacity: 1; letter-spacing: 6px; }
+}
+
+.scan-container {
+position: relative;
+width: 200px;
+height: 200px;
+border-radius: 22px;
+overflow: hidden;
+background: linear-gradient(180deg, #11182b, #090d18);
+border: 2px solid #25436f;
+box-shadow: 0 0 30px rgba(42, 74, 122, 0.5);
+display: grid;
+place-items: center;
+}
+
+.scan-badge {
+width: 130px;
+height: 130px;
+border-radius: 28px;
+border: 1px solid rgba(113, 200, 255, 0.3);
+background:
+radial-gradient(circle at top left, rgba(113, 200, 255, 0.2), transparent 48%),
+linear-gradient(180deg, #0c1426, #111d36);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 2.8rem;
+font-weight: 800;
+color: #ffffff;
+letter-spacing: 4px;
+text-shadow: 0 0 25px rgba(74, 158, 255, 0.45);
+}
+
+.scan-line {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 4px;
+background: linear-gradient(90deg, transparent, #4a9eff, #8fbbff, #4a9eff, transparent);
+animation: scan 2s ease-in-out infinite;
+box-shadow: 0 0 10px #4a9eff;
+}
+
+@keyframes scan {
+0% { top: 0; }
+50% { top: 100%; }
+100% { top: 0; }
+}
+
+.splash-footer {
+margin-top: 2rem;
+font-size: 0.82rem;
+color: #6f9fdf;
+text-align: center;
+}
+
+.main-content {
+position: relative;
+z-index: 1;
+opacity: 0;
+transition: opacity 1s ease;
+}
+
+.main-content.show {
+opacity: 1;
+}
+
+.container {
+max-width: 920px;
+margin: 0 auto;
+padding: 2rem 1.5rem 3rem;
+}
+
+.brand {
+text-align: center;
+margin-bottom: 2rem;
+}
+
+.brand h1 {
+font-size: 2.8rem;
+font-weight: 800;
+letter-spacing: -0.5px;
+background: linear-gradient(135deg, #ffffff, var(--accent-2), #4b77ff);
+background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
+}
+
+.brand p {
+font-size: 0.95rem;
+opacity: 0.78;
+margin-top: 0.55rem;
+}
+
+.slogan {
+margin-top: 0.8rem;
+display: inline-block;
+padding: 0.35rem 1.45rem;
+border-radius: 999px;
+border: 1px solid rgba(74, 158, 255, 0.28);
+background: rgba(42, 74, 122, 0.18);
+font-size: 0.86rem;
+font-style: italic;
+}
+
+.step-indicator {
+display: flex;
+justify-content: center;
+gap: 1.5rem;
+flex-wrap: wrap;
+margin-bottom: 2rem;
+}
+
+.step {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.55rem;
+opacity: 0.42;
+transition: 0.3s ease;
+cursor: pointer;
+text-align: center;
+}
+
+.step.active {
+opacity: 1;
+}
+
+.step-number {
+width: 46px;
+height: 46px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(42, 74, 122, 0.22);
+border: 2px solid #2a4a7a;
+font-weight: 700;
+transition: 0.3s ease;
+}
+
+.step.active .step-number {
+background: #193258;
+border-color: var(--line-strong);
+box-shadow: 0 0 15px rgba(74, 158, 255, 0.5);
+}
+
+.step-label {
+font-size: 0.71rem;
+font-weight: 600;
+letter-spacing: 0.5px;
+}
+
+.glass-card {
+background: var(--card);
+backdrop-filter: blur(12px);
+border-radius: 2rem;
+border: 1px solid var(--line);
+box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(42, 74, 122, 0.18);
+overflow: hidden;
+padding: 2rem;
+}
+
+.page {
+display: none;
+animation: fadeIn 0.4s ease;
+}
+
+.page.active {
+display: block;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateX(20px); }
+to { opacity: 1; transform: translateX(0); }
+}
+
+.page-title {
+margin-bottom: 1rem;
+font-size: 1.35rem;
+}
+
+.page-subtitle {
+margin-bottom: 1.5rem;
+color: var(--muted);
+font-size: 0.88rem;
+}
+
+.input-group {
+margin-bottom: 1.5rem;
+}
+
+.input-group label {
+display: block;
+margin-bottom: 0.5rem;
+font-size: 0.85rem;
+font-weight: 600;
+color: var(--muted);
+letter-spacing: 0.4px;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+width: 100%;
+background: rgba(0, 0, 0, 0.48);
+border: 1px solid #2a4a7a;
+border-radius: 1rem;
+padding: 0.9rem 1.15rem;
+color: #ffffff;
+font-family: "Inter", sans-serif;
+font-size: 0.95rem;
+transition: 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+border-color: var(--line-strong);
+box-shadow: 0 0 10px rgba(74, 158, 255, 0.3);
+outline: none;
+}
+
+.law-container {
+max-height: 450px;
+overflow-y: auto;
+padding: 1.2rem;
+margin-bottom: 1.5rem;
+background: rgba(0, 0, 0, 0.3);
+border-radius: 1rem;
+border: 1px solid #1a3a5c;
+}
+
+.law-chapter {
+margin-bottom: 1.5rem;
+border-left: 3px solid var(--accent);
+padding-left: 1rem;
+}
+
+.law-chapter h4 {
+font-size: 1rem;
+font-weight: 700;
+margin-bottom: 0.75rem;
+color: var(--gold);
+}
+
+.law-article {
+font-size: 0.79rem;
+margin: 0.75rem 0;
+line-height: 1.62;
+color: #ccddf8;
+}
+
+.law-article strong {
+color: #7ab3d9;
+}
+
+.checkbox-group {
+display: flex;
+align-items: flex-start;
+gap: 12px;
+margin: 1.2rem 0;
+}
+
+.checkbox-group input {
+width: 20px;
+height: 20px;
+margin-top: 3px;
+cursor: pointer;
+accent-color: #2a4a7a;
+flex-shrink: 0;
+}
+
+.button-group {
+display: flex;
+justify-content: space-between;
+gap: 1rem;
+margin-top: 2rem;
+}
+
+.btn {
+padding: 0.85rem 2rem;
+border-radius: 2rem;
+font-weight: 700;
+cursor: pointer;
+transition: all 0.2s ease;
+border: none;
+font-size: 0.9rem;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+}
+
+.btn-prev {
+background: rgba(42, 74, 122, 0.3);
+color: #ffffff;
+border: 1px solid #2a4a7a;
+}
+
+.btn-prev:hover {
+background: rgba(42, 74, 122, 0.6);
+transform: translateX(-3px);
+}
+
+.btn-next {
+background: linear-gradient(135deg, #1a3a5c, #0a1a2c);
+color: #ffffff;
+border: 1px solid var(--line-strong);
+}
+
+.btn-next:hover {
+background: linear-gradient(135deg, #2a5a8a, #1a3a5c);
+transform: translateX(3px);
+box-shadow: 0 0 15px rgba(74, 158, 255, 0.3);
+}
+
+.btn-submit {
+background: linear-gradient(135deg, #145a44, #0a3d2d);
+color: #ffffff;
+border: 1px solid #54e0a6;
+}
+
+.btn-submit:hover {
+background: linear-gradient(135deg, #1d7658, #10523d);
+transform: scale(1.02);
+box-shadow: 0 0 20px rgba(74, 255, 138, 0.3);
+}
+
+.summary-card,
+.result-card,
+.copy-card {
+background: rgba(0, 0, 0, 0.4);
+border-radius: 1.2rem;
+padding: 1.2rem;
+margin: 1rem 0;
+border: 1px solid #2a4a7a;
+}
+
+.summary-item {
+display: flex;
+padding: 0.6rem 0;
+border-bottom: 1px solid rgba(42, 74, 122, 0.3);
+gap: 1rem;
+}
+
+.summary-item:last-child {
+border-bottom: none;
+}
+
+.summary-label {
+width: 160px;
+font-weight: 600;
+color: #7ab3d9;
+flex-shrink: 0;
+}
+
+.summary-value {
+flex: 1;
+color: #ffffff;
+word-break: break-word;
+}
+
+.result-head {
+display: flex;
+align-items: center;
+gap: 0.75rem;
+margin-bottom: 0.85rem;
+color: #dff4ff;
+}
+
+.result-badge {
+display: inline-flex;
+align-items: center;
+gap: 0.35rem;
+background: rgba(82, 221, 149, 0.14);
+border: 1px solid rgba(82, 221, 149, 0.45);
+color: #b7ffd8;
+padding: 0.42rem 0.85rem;
+border-radius: 999px;
+font-size: 0.8rem;
+font-weight: 700;
+}
+
+.copy-card p {
+font-size: 0.86rem;
+color: var(--muted);
+margin-bottom: 0.85rem;
+}
+
+.message-preview {
+width: 100%;
+min-height: 220px;
+resize: vertical;
+border-radius: 1rem;
+border: 1px solid #2a4a7a;
+background: rgba(0, 0, 0, 0.48);
+color: #ffffff;
+padding: 1rem;
+font-family: "Inter", sans-serif;
+font-size: 0.9rem;
+line-height: 1.6;
+}
+
+.info-note,
+.error-msg,
+.success-msg {
+padding: 0.8rem 0.95rem;
+border-radius: 0.9rem;
+font-size: 0.82rem;
+margin-top: 0.8rem;
+}
+
+.info-note {
+background: rgba(74, 158, 255, 0.12);
+border-left: 4px solid rgba(74, 158, 255, 0.8);
+color: #ddecff;
+}
+
+.error-msg {
+background: rgba(96, 29, 29, 0.88);
+border-left: 4px solid var(--warning);
+color: #ffe7e7;
+}
+
+.success-msg {
+background: rgba(16, 70, 48, 0.88);
+border-left: 4px solid var(--success);
+color: #ddffe7;
+}
+
+.footer-note {
+text-align: center;
+margin-top: 2rem;
+font-size: 0.72rem;
+opacity: 0.45;
+}
+
+::-webkit-scrollbar {
+width: 6px;
+}
+
+::-webkit-scrollbar-track {
+background: #0a1a2c;
+border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+background: #2a4a7a;
+border-radius: 10px;
+}
+
+@media (max-width: 640px) {
+.glass-card {
+padding: 1.2rem;
+}
+
+.brand h1 {
+font-size: 2.1rem;
+}
+
+.summary-item {
+flex-direction: column;
+gap: 0.25rem;
+}
+
+.summary-label {
+width: auto;
+}
+
+.btn {
+padding: 0.72rem 1.2rem;
+}
+
+.button-group {
+flex-wrap: wrap;
+}
+}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<div class="splash-screen" id="splashScreen">
+<div class="connecting-text">CONNECTING...</div>
+<div class="scan-container">
+<div class="scan-badge">ISC</div>
+<div class="scan-line"></div>
+</div>
+<div class="splash-footer">
+<i class="fas fa-satellite-dish"></i> Establishing secure connection...
+</div>
+</div>
+
+
+<div id="iscAuthOverlay" role="dialog" aria-modal="true" aria-label="Akun ISC">
+ <section class="isc-auth-card">
+  <div class="isc-auth-brand"><div class="isc-auth-logo">ISC</div><div><strong>INTERNATIONAL SCIENCE COMMUNITY</strong><span>Explore science. Share knowledge.</span></div></div>
+  <h2 id="iscAuthTitle">Buat akun ISC</h2>
+  <p class="isc-auth-muted" id="iscAuthSubtitle">Daftar terlebih dahulu untuk bergabung dengan komunitas sains dan diskusi.</p>
+  <div class="isc-auth-tabs" role="tablist" aria-label="Akun"><button id="iscSignupTab" type="button" class="active" role="tab" aria-selected="true">Buat akun</button><button id="iscLoginTab" type="button" role="tab" aria-selected="false">Login</button></div>
+  <div class="isc-hidden-trap" aria-hidden="true"><label for="iscWebsiteTrap">Leave this field empty</label><input id="iscWebsiteTrap" name="company_website" tabindex="-1" autocomplete="off"></div>
+  <form id="iscAuthForm">
+   <label for="iscUsername">Nama pengguna</label><input id="iscUsername" maxlength="32" minlength="3" autocomplete="username" placeholder="Contoh: stellar_user" required>
+   <label for="iscPassword">Kata sandi</label><input id="iscPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Minimal 8 karakter" required>
+   <button id="iscPrimaryBtn" type="submit">Buat akun</button>
+  </form>
+  <div id="iscAuthMsg" class="isc-auth-msg" aria-live="polite"></div>
+  <p class="isc-auth-note">Saat ini akun tersimpan hanya di browser/perangkat ini. Database online lintas perangkat belum diaktifkan.</p>
+  <div class="isc-auth-foot">ISC • International Science Community<br>Jaga keamanan akunmu dan jangan gunakan kata sandi penting.</div>
+ </section>
+</div>
+
+<div class="main-content" id="mainContent">
+<div class="container">
+<div class="brand">
+<h1><i class="fas fa-newspaper"></i> ISC</h1>
+<p>International Science Community — ruang komunitas sains dan diskusi</p>
+<div class="slogan">
+<i class="fas fa-bullhorn"></i> "Explore science. Share knowledge."
+</div>
+</div>
+
+<div class="step-indicator">
+<div class="step" data-step="1" onclick="goToPage(1)">
+<div class="step-number">1</div>
+<span class="step-label">DATA DIRI</span>
+</div>
+<div class="step" data-step="2" onclick="goToPage(2)">
+<div class="step-number">2</div>
+<span class="step-label">KONTAK</span>
+</div>
+<div class="step" data-step="3" onclick="goToPage(3)">
+<div class="step-number">3</div>
+<span class="step-label">PERATURAN</span>
+</div>
+<div class="step" data-step="4" onclick="goToPage(4)">
+<div class="step-number">4</div>
+<span class="step-label">HASIL</span>
+</div>
+</div>
+
+<div class="glass-card">
+<div id="page1" class="page active">
+<h3 class="page-title"><i class="fas fa-id-card"></i> Data Diri</h3>
+<p class="page-subtitle">Lengkapi identitas dasar untuk proses verifikasi awal komunitas.</p>
+
+<div class="input-group">
+<label for="fullname">Nama Lengkap</label>
+<input type="text" id="fullname" placeholder="Contoh: Budi Santoso">
+</div>
+
+<div class="input-group">
+<label for="age">Umur</label>
+<input type="number" id="age" placeholder="Contoh: 22" min="1" max="120">
+</div>
+
+<div class="input-group">
+<label for="address">Alamat / Domisili</label>
+<input type="text" id="address" placeholder="Kota, Provinsi">
+</div>
+
+<div id="errorPage1"></div>
+
+<div class="button-group">
+<div></div>
+<button class="btn btn-next" onclick="nextPage(1)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+</div>
+</div>
+
+<div id="page2" class="page">
+<h3 class="page-title"><i class="fas fa-globe"></i> Informasi Kontak</h3>
+<p class="page-subtitle">Masukkan kontak yang aktif agar tim bisa menghubungi Anda bila diperlukan.</p>
+
+<div class="input-group">
+<label for="email">Email</label>
+<input type="email" id="email" placeholder="nama@example.com">
+</div>
+
+<div class="input-group">
+<label for="newsFocus">Topik Berita / Niche</label>
+<input type="text" id="newsFocus" placeholder="Politik, teknologi, olahraga, lokal, dan lain-lain">
+</div>
+
+<div class="input-group">
+<label for="whatsapp">Nomor WhatsApp</label>
+<input type="tel" id="whatsapp" placeholder="08123456789">
+</div>
+
+<div id="errorPage2"></div>
+
+<div class="button-group">
+<button class="btn btn-prev" onclick="prevPage(2)"><i class="fas fa-arrow-left"></i> Kembali</button>
+<button class="btn btn-next" onclick="nextPage(2)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+</div>
+</div>
+
+<div id="page3" class="page">
+<h3 class="page-title"><i class="fas fa-scale-balanced"></i> Peraturan ISC</h3>
+<p class="page-subtitle">Baca seluruh ketentuan dengan teliti sebelum melanjutkan ke hasil verifikasi formulir.</p>
+
+<div class="law-container">
+<div class="law-chapter">
+<h4>BAB I: IDENTITAS DAN VISI</h4>
+<div class="law-article">
+<strong>Pasal 1: Nama Komunitas</strong><br>
+Ayat 1. Komunitas ini bernama ISC.<br>
+Ayat 2. ISC berfungsi sebagai ruang kolaborasi, diskusi, dan distribusi informasi yang bertanggung jawab.
+</div>
+<div class="law-article">
+<strong>Pasal 2: Visi</strong><br>
+Ayat 1. Menumbuhkan budaya berbagi informasi yang cepat, akurat, dan bermanfaat.<br>
+Ayat 2. Menjadikan anggota sebagai penyampai informasi yang mengutamakan verifikasi dan etika.
+</div>
+</div>
+
+<div class="law-chapter">
+<h4>BAB II: NILAI DASAR</h4>
+<div class="law-article">
+<strong>Pasal 3: Integritas Informasi</strong><br>
+Ayat 1. Setiap anggota wajib mengutamakan fakta, sumber jelas, dan konteks yang benar.<br>
+Ayat 2. Informasi yang belum terverifikasi tidak boleh dipublikasikan atas nama komunitas.
+</div>
+<div class="law-article">
+<strong>Pasal 4: Tanggung Jawab Digital</strong><br>
+Ayat 1. Anggota dilarang menyebarkan hoaks, fitnah, manipulasi informasi, atau konten menyesatkan.<br>
+Ayat 2. Anggota wajib melakukan koreksi apabila sebelumnya menyebarkan informasi yang terbukti keliru.
+</div>
+</div>
+
+<div class="law-chapter">
+<h4>BAB III: KEANGGOTAAN</h4>
+<div class="law-article">
+<strong>Pasal 5: Syarat Anggota</strong><br>
+Ayat 1. Anggota adalah individu yang tertarik pada dunia berita, literasi media, riset, atau distribusi informasi.<br>
+Ayat 2. Status keanggotaan aktif diberikan setelah calon anggota mengisi formulir dan mengikuti mekanisme yang ditetapkan komunitas.
+</div>
+<div class="law-article">
+<strong>Pasal 6: Hak Anggota</strong><br>
+Ayat 1. Anggota berhak mengikuti diskusi, berbagi temuan, dan mendapatkan akses informasi internal komunitas.<br>
+Ayat 2. Anggota berhak mengusulkan ide program yang mendukung kualitas informasi publik.
+</div>
+<div class="law-article">
+<strong>Pasal 7: Kewajiban Anggota</strong><br>
+Ayat 1. Anggota wajib menjaga etika komunikasi dalam forum komunitas.<br>
+Ayat 2. Anggota wajib menghargai privasi, hak cipta, dan keselamatan narasumber maupun sesama anggota.
+</div>
+</div>
+
+<div class="law-chapter">
+<h4>BAB IV: ETIKA PUBLIKASI</h4>
+<div class="law-article">
+<strong>Pasal 8: Verifikasi</strong><br>
+Ayat 1. Setiap publikasi penting wajib memuat sumber atau dasar informasi yang memadai.<br>
+Ayat 2. Tangkapan layar, kutipan, dan data harus disajikan tanpa manipulasi yang menyesatkan.
+</div>
+<div class="law-article">
+<strong>Pasal 9: Sikap di Komunitas</strong><br>
+Ayat 1. Diskusi dijaga tetap sopan, relevan, dan bebas ujaran kebencian.<br>
+Ayat 2. Spam, promosi berlebihan, serta provokasi yang mengganggu jalannya diskusi dilarang.
+</div>
+</div>
+
+<div class="law-chapter">
+<h4>BAB V: PENUTUP</h4>
+<div class="law-article">
+<strong>Pasal 10: Kepatuhan</strong><br>
+Ayat 1. Dengan mengisi formulir ini, calon anggota menyatakan memahami aturan komunitas.<br>
+Ayat 2. Pelanggaran terhadap aturan dapat berakibat pembatasan akses atau pengeluaran dari komunitas.
+</div>
+</div>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="agreeLaw">
+<label for="agreeLaw">Saya telah membaca seluruh peraturan ISC dan siap mematuhi etika berbagi informasi, verifikasi fakta, dan tata tertib komunitas.</label>
+</div>
+
+<div id="errorPage3"></div>
+
+<div class="button-group">
+<button class="btn btn-prev" onclick="prevPage(3)"><i class="fas fa-arrow-left"></i> Kembali</button>
+<button class="btn btn-next" onclick="nextPage(3)">Selanjutnya <i class="fas fa-arrow-right"></i></button>
+</div>
+</div>
+
+<div id="page4" class="page">
+<h3 class="page-title"><i class="fas fa-clipboard-check"></i> Hasil Verifikasi Formulir</h3>
+<p class="page-subtitle">Data Anda dirangkum otomatis. Saat tombol diklik, hasil ini disalin ke clipboard lalu link grup WhatsApp akan dibuka.</p>
+
+<div class="summary-card" id="summaryContainer"></div>
+
+<div class="result-card">
+<div class="result-head">
+<div class="result-badge"><i class="fas fa-circle-check"></i> Lolos Tahap Formulir</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Status Seleksi</div>
+<div class="summary-value">Data wajib lengkap dan persetujuan peraturan telah terpenuhi.</div>
+</div>
+<div class="summary-item">
+<div class="summary-label">Tindakan Lanjut</div>
+<div class="summary-value">Hasil akan disalin otomatis, lalu halaman grup WhatsApp dibuka agar pesan dapat langsung ditempel dan dikirim.</div>
+</div>
+</div>
+
+<div class="copy-card">
+<p>Preview teks yang akan disalin:</p>
+<textarea id="messagePreview" class="message-preview" readonly></textarea>
+<div class="info-note">
+Otomatis kirim langsung ke grup WhatsApp tidak bisa dijamin dari web biasa memakai link undangan grup. Solusi paling stabil adalah menyalin hasil otomatis lalu membuka grup untuk ditempel.
+</div>
+</div>
+
+<div id="errorPage4"></div>
+
+<div class="button-group">
+<button class="btn btn-prev" onclick="prevPage(4)"><i class="fas fa-arrow-left"></i> Kembali</button>
+<button class="btn btn-submit" id="submitWA"><i class="fas fa-paper-plane"></i> Salin & Buka Grup</button>
+</div>
+
+<div id="formFeedback"></div>
+</div>
+</div>
+
+<div class="footer-note">
+<i class="fas fa-shield-alt"></i> ISC - Verify the facts, share with impact
+</div>
+</div>
+</div>
+
+<script>
+const groupInviteLink = "https://chat.whatsapp.com/EZH43V3tHNmG1DJXEpvAP2?s=cl&p=a&mlu=4&ilr=4";
+let currentPage = 1;
+
+function createStars() {
+const starsContainer = document.getElementById("stars");
+for (let i = 0; i < 150; i += 1) {
+const star = document.createElement("div");
+star.classList.add("star");
+star.style.width = `${Math.random() * 3}px`;
+star.style.height = star.style.width;
+star.style.left = `${Math.random() * 100}%`;
+star.style.top = `${Math.random() * 100}%`;
+star.style.animationDelay = `${Math.random() * 5}s`;
+star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+starsContainer.appendChild(star);
+}
+}
+
+function startSplashScreen() {
+setTimeout(() => {
+const splash = document.getElementById("splashScreen");
+splash.classList.add("hide");
+setTimeout(() => {
+splash.style.display = "none";
+document.getElementById("mainContent").classList.add("show");
+}, 800);
+}, 3200);
+}
+
+function showPage(page) {
+for (let i = 1; i <= 4; i += 1) {
+const pageElement = document.getElementById(`page${i}`);
+const step = document.querySelector(`.step[data-step="${i}"]`);
+if (pageElement) {
+pageElement.classList.remove("active");
+}
+if (step) {
+step.classList.remove("active");
+}
+}
+
+document.getElementById(`page${page}`).classList.add("active");
+document.querySelector(`.step[data-step="${page}"]`).classList.add("active");
+
+if (page === 4) {
+updateSummary();
+}
+
+currentPage = page;
+}
+
+function setError(elementId, message) {
+document.getElementById(elementId).innerHTML = message
+? `<div class="error-msg"><i class="fas fa-exclamation-triangle"></i> ${message}</div>`
+: "";
+}
+
+function validatePage1() {
+const fullname = document.getElementById("fullname").value.trim();
+const age = document.getElementById("age").value.trim();
+
+if (!fullname) {
+setError("errorPage1", "Nama lengkap wajib diisi.");
+return false;
+}
+
+if (!age) {
+setError("errorPage1", "Umur wajib diisi.");
+return false;
+}
+
+if (Number.isNaN(Number(age)) || Number(age) < 1 || Number(age) > 120) {
+setError("errorPage1", "Umur tidak valid.");
+return false;
+}
+
+setError("errorPage1", "");
+return true;
+}
+
+function validatePage2() {
+const email = document.getElementById("email").value.trim();
+const whatsapp = document.getElementById("whatsapp").value.trim();
+
+if (!email) {
+setError("errorPage2", "Email wajib diisi.");
+return false;
+}
+
+if (!email.includes("@") || !email.includes(".")) {
+setError("errorPage2", "Email tidak valid.");
+return false;
+}
+
+if (!whatsapp) {
+setError("errorPage2", "Nomor WhatsApp wajib diisi.");
+return false;
+}
+
+setError("errorPage2", "");
+return true;
+}
+
+function validatePage3() {
+const agree = document.getElementById("agreeLaw").checked;
+if (!agree) {
+setError("errorPage3", "Anda harus menyetujui seluruh peraturan ISC.");
+return false;
+}
+
+setError("errorPage3", "");
+return true;
+}
+
+function nextPage(from) {
+if (from === 1 && !validatePage1()) return;
+if (from === 2 && !validatePage2()) return;
+if (from === 3 && !validatePage3()) return;
+showPage(from + 1);
+}
+
+function prevPage(from) {
+showPage(from - 1);
+}
+
+function goToPage(page) {
+if (page > currentPage) {
+if (currentPage === 1 && !validatePage1()) return;
+if (currentPage === 2 && !validatePage2()) return;
+if (currentPage === 3 && !validatePage3()) return;
+}
+showPage(page);
+}
+
+function getAllData() {
+return {
+fullname: document.getElementById("fullname").value.trim(),
+age: document.getElementById("age").value.trim(),
+address: document.getElementById("address").value.trim(),
+email: document.getElementById("email").value.trim(),
+newsFocus: document.getElementById("newsFocus").value.trim(),
+whatsapp: document.getElementById("whatsapp").value.trim()
+};
+}
+
+function buildSummaryHtml(data) {
+return `
+<div class="summary-item"><div class="summary-label"><i class="fas fa-user"></i> Nama Lengkap</div><div class="summary-value">${data.fullname || "-"}</div></div>
+<div class="summary-item"><div class="summary-label"><i class="fas fa-calendar-alt"></i> Umur</div><div class="summary-value">${data.age || "-"} tahun</div></div>
+<div class="summary-item"><div class="summary-label"><i class="fas fa-map-marker-alt"></i> Alamat</div><div class="summary-value">${data.address || "-"}</div></div>
+<div class="summary-item"><div class="summary-label"><i class="fas fa-envelope"></i> Email</div><div class="summary-value">${data.email || "-"}</div></div>
+<div class="summary-item"><div class="summary-label"><i class="fas fa-layer-group"></i> Fokus Berita</div><div class="summary-value">${data.newsFocus || "-"}</div></div>
+<div class="summary-item"><div class="summary-label"><i class="fab fa-whatsapp"></i> WhatsApp</div><div class="summary-value">${data.whatsapp || "-"}</div></div>
+`;
+}
+
+function buildResultMessage(data) {
+return [
+"Halo Admin / Tim ISC, saya ingin bergabung.",
+"",
+"HASIL SELEKSI AWAL",
+"------------------------------",
+`Nama Lengkap : ${data.fullname}`,
+`Umur         : ${data.age} tahun`,
+`Alamat       : ${data.address || "-"}`,
+`Email        : ${data.email}`,
+`Fokus Berita : ${data.newsFocus || "-"}`,
+`WhatsApp     : ${data.whatsapp}`,
+"------------------------------",
+"Status       : Lolos tahap formulir",
+"Keterangan   : Sudah membaca dan menyetujui peraturan ISC",
+"",
+"Mohon ditinjau untuk proses selanjutnya.",
+"ISC - Verify the facts, share with impact"
+].join("\n");
+}
+
+function updateSummary() {
+const data = getAllData();
+document.getElementById("summaryContainer").innerHTML = buildSummaryHtml(data);
+document.getElementById("messagePreview").value = buildResultMessage(data);
+setError("errorPage4", "");
+}
+
+async function copyToClipboard(text) {
+if (navigator.clipboard && window.isSecureContext) {
+await navigator.clipboard.writeText(text);
+return true;
+}
+
+const tempTextArea = document.createElement("textarea");
+tempTextArea.value = text;
+tempTextArea.style.position = "fixed";
+tempTextArea.style.left = "-9999px";
+document.body.appendChild(tempTextArea);
+tempTextArea.focus();
+tempTextArea.select();
+const copied = document.execCommand("copy");
+document.body.removeChild(tempTextArea);
+return copied;
+}
+
+function ensureFinalStepIsValid() {
+if (!validatePage1() || !validatePage2() || !validatePage3()) {
+setError("errorPage4", "Pastikan semua data wajib telah terisi dan persetujuan aturan sudah dicentang.");
+return false;
+}
+return true;
+}
+
+document.getElementById("submitWA").addEventListener("click", async () => {
+const feedbackDiv = document.getElementById("formFeedback");
+if (!ensureFinalStepIsValid()) {
+return;
+}
+
+const data = getAllData();
+const message = buildResultMessage(data);
+let copied = false;
+
+try {
+copied = await copyToClipboard(message);
+} catch (error) {
+copied = false;
+}
+
+if (copied) {
+feedbackDiv.innerHTML = '<div class="success-msg"><i class="fas fa-check-circle"></i> Hasil berhasil disalin ke clipboard. Tab grup WhatsApp sedang dibuka, lalu tempel pesan dan kirim.</div>';
+} else {
+feedbackDiv.innerHTML = '<div class="error-msg"><i class="fas fa-circle-info"></i> Browser menolak akses clipboard otomatis. Teks tetap tersedia pada kotak preview, silakan salin manual lalu kirim ke grup.</div>';
+document.getElementById("messagePreview").focus();
+document.getElementById("messagePreview").select();
+}
+
+window.open(groupInviteLink, "_blank", "noopener,noreferrer");
+});
+
+createStars();
+startSplashScreen();
+showPage(1);
+</script>
+
+<script>
+(function(){
+ const DB_KEY='isc_demo_accounts_v1';
+ const SESSION_KEY='isc_demo_session_v1';
+ const $=id=>document.getElementById(id);
+ const msg=$('iscAuthMsg'), form=$('iscAuthForm'), primary=$('iscPrimaryBtn');
+ let mode='signup', busy=false;
+ function readDB(){try{const d=JSON.parse(localStorage.getItem(DB_KEY)||'[]');return Array.isArray(d)?d:[]}catch(e){return []}}
+ function writeDB(d){localStorage.setItem(DB_KEY,JSON.stringify(d))}
+ async function digest(value){
+   const bytes=new TextEncoder().encode(value);
+   const hash=await crypto.subtle.digest('SHA-256',bytes);
+   return Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,'0')).join('');
+ }
+ function say(t){msg.textContent=t}
+ function setMode(next, notice=''){
+   mode=next;
+   const signup=mode==='signup';
+   $('iscAuthTitle').textContent=signup?'Buat akun ISC':'Login ke ISC';
+   $('iscAuthSubtitle').textContent=signup?'Daftar terlebih dahulu untuk bergabung dengan komunitas sains dan diskusi.':'Sudah punya akun? Masuk untuk melanjutkan ke komunitas ISC.';
+   $('iscSignupTab').classList.toggle('active',signup);$('iscLoginTab').classList.toggle('active',!signup);
+   $('iscSignupTab').setAttribute('aria-selected',String(signup));$('iscLoginTab').setAttribute('aria-selected',String(!signup));
+   $('iscPassword').setAttribute('autocomplete',signup?'new-password':'current-password');
+   primary.textContent=signup?'Buat akun':'Login';
+   say(notice);
+ }
+ $('iscSignupTab').addEventListener('click',()=>setMode('signup'));
+ $('iscLoginTab').addEventListener('click',()=>setMode('login'));
+ form.addEventListener('submit',async e=>{
+   e.preventDefault();if(busy)return;
+   const name=$('iscUsername').value.trim(), pw=$('iscPassword').value;
+   if(name.length<3||name.length>32||!/^[\p{L}\p{N}_.-]+$/u.test(name)){say('Username harus 3–32 karakter dan hanya boleh memakai huruf, angka, titik, garis bawah, atau tanda hubung.');return}
+   if(pw.length<8){say('Kata sandi minimal 8 karakter.');return}
+   busy=true;primary.disabled=true;
+   try{
+     const db=readDB(), key=name.toLocaleLowerCase();
+     if(mode==='signup'){
+       if(db.some(u=>u.key===key)){say('Username sudah digunakan. Coba username lain atau login jika itu akunmu.');return}
+       const passwordHash=await digest(pw);
+       const createdAt=new Date().toISOString();
+       db.push({key,name,passwordHash,createdAt,lastLogin:null,loginCount:0});writeDB(db);
+       $('iscPassword').value='';
+       say('Akun berhasil dibuat. Sekarang login menggunakan username dan kata sandi yang baru dibuat.');
+       setMode('login','Akun berhasil dibuat. Silakan login untuk masuk ke ISC.');
+       try{
+         const response=await fetch('/api/registration-notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:name,company_website:$('iscWebsiteTrap').value})});
+         if(!response.ok)throw new Error('Discord notification failed');
+         say('Akun berhasil dibuat dan notifikasi terkirim ke Discord. Silakan login.');
+       }catch(err){say('Akun berhasil dibuat, tetapi notifikasi Discord gagal terkirim. Silakan login; admin perlu memeriksa konfigurasi webhook Vercel.');}
+     }else{
+       const user=db.find(u=>u.key===key);
+       if(!user||user.passwordHash!==await digest(pw)){say('Username atau kata sandi salah. Jika belum punya akun, pilih Buat akun terlebih dahulu.');return}
+       user.lastLogin=new Date().toISOString();user.loginCount=(user.loginCount||0)+1;writeDB(db);
+       localStorage.setItem(SESSION_KEY,JSON.stringify({key:user.key,at:new Date().toISOString()}));
+       $('iscAuthOverlay').style.display='none';$('mainContent').classList.add('show');
+       $('splashScreen').classList.add('hide');setTimeout(()=>{$('splashScreen').style.display='none'},250);
+     }
+   }catch(err){say('Terjadi kesalahan saat memproses akun. Coba lagi.');}
+   finally{busy=false;primary.disabled=false;}
+ });
+ // Always require signup or login before showing the community page.
+ $('iscAuthOverlay').style.display='flex';
+ setMode('signup');
+})();
+</script>
+
+</body>
+</html><script data-prolive-run></script></body></html>
