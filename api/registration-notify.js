@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
     return reply(res, 405, { error: 'Method not allowed' });
   }
 
-  const webhook = process.env.DISCORD_WEBHOOK_URL;
+  const webhook = process.env.discord_webhook_url;
   if (!webhook) {
     return reply(res, 500, { error: 'Notification service is not configured' });
   }
